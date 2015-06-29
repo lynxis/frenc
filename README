@@ -1,0 +1,11 @@
+# Example blinkled for H8/S 2161 [built-in Thinkpad T40]
+
+## how to compiles
+- debian jessy
+- gcc-h8300-hms
+- binutils-h8300-hms
+- build-essentials
+
+## flash
+- cp blinkled blinkled.mot
+- use renesas flash tool kit (or any other working flash tool with application)
