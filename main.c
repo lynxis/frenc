@@ -24,34 +24,72 @@
 #define P8DR	((volatile unsigned char*)	(0xffffbf)) /* Port 8 Data Register */
 #define P9DDR	((volatile unsigned char*)	(0xffffc0)) /* Port 9 Data Direction Register */
 #define P9DR	((volatile unsigned char*)	(0xffffc1)) /* Port 9 Data Register */
-
 #define PDDDR ((volatile unsigned char*)  (0xffff4f)) /* Port D Data Direction Register */
 #define PDODR ((volatile unsigned char*)  (0xffff4d)) /* Port D Data Register */
 
+void sleep1s() {
+  for (unsigned int j=0; j<65535; j++)
+      ;
+  for (unsigned int j=0; j<65535; j++)
+      ;
+}
+
+void sleep(int seconds) {
+  while(seconds-- > 0)
+    sleep1s();
+}
+
+void led_caps(short state) {
+  if (state)
+    *P2DR &= ~(1 << 7);
+  else
+    *P2DR |= (1 << 7);
+}
+
+void led_num(short state) {
+  if (state)
+    *P2DR &= ~(1 << 5);
+  else
+    *P2DR |= (1 << 5);
+}
+
+void power_board() {
+  /* !mainoff */
+  *P2DR |= (1 << 4);
+
+  /* FAN On */
+  *P4DDR = (1 << 4);
+  *P4DR |= (1 << 4);
+
+  /* -pwrsw_h8s */
+  *P9DDR = (1 << 5);
+
+  *P9DR |= (1 << 5);
+  sleep(2);
+  *P9DR &= ~(1 << 5);
+  sleep(2);
+  *P9DR |= (1 << 5);
+}
 
 int main() {
+  *P2DDR = ((1 << 4) | (1 << 5) | (1 << 7));
+  led_num(1);
+  led_caps(1);
 
-  *P2DDR |= ((1 << 5) | (1 << 7));
-  int output = *P2DDR;
-  int data = *P2DR;
-  while (1) {
-    /* enable output for p25, p27 */
-    *P2DR &= ~(1 << 5);
-    *P2DR &= ~(1 << 7);
-    output = *P2DDR;
-    data = *P2DR;
-    output;
-    data;
-    for (unsigned int j=0; j<65535; j++)
-        ;
-    *P2DR |= (1 << 5);
-    *P2DR |= (1 << 7);
-    output = *P2DDR;
-    data = *P2DR;
-    output;
-    data;
-
-    for (unsigned int j=0; j<65535; j++)
-        ;
+  for(int i=0; i<5; i++) {
+    led_num(1);
+    sleep(1);
+    led_num(0);
+    sleep(1);
   }
+
+  power_board();
+
+  for(int i=0; i<5; i++) {
+    led_caps(1);
+    sleep(1);
+    led_caps(0);
+    sleep(1);
+  }
+
 }
