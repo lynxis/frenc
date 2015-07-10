@@ -39,6 +39,11 @@ void sleep(int seconds) {
     sleep1s();
 }
 
+void usleep(int useconds) {
+  while(useconds-- > 0)
+    ;
+}
+
 void led_caps(short state) {
   if (state)
     *P2DR &= ~(1 << 7);
@@ -70,12 +75,59 @@ void power_board() {
   *P9DR |= (1 << 5);
 }
 
+/* send a simple hello to the board
+ * 1 / (sleep_us*2) = frequency.
+ */
+
+/* data direction must be set to output seperate*/
+#define XP_CLK 0
+#define XP_DATA 1
+#define XP_LE 2
+#define XP_OE 3
+#define XP_PORT_DATA P2DR
+
+/* bit bang the XP (extra protocol? :)
+ *
+ * The protocol use a data and a clock line. It's unidirectional.
+ * Transmit one bit per clock cycle.
+ * After all bytes are send, shortly pulse the LE pin to high.
+ * OE is Low as long we are talking to the chip
+ */
+void send_watchme(int sleep_us, char *message, int len) {
+  /* OE must be low all the time */
+  *XP_PORT_DATA &= ~(1 << XP_OE);
+
+  /* message loop - transmit byte by byte */
+  for (int i=0; i < len; i++) {
+
+    /* byte loop - transmit bit by bit */
+    for (short j=8; j < 0; i++) {
+      *XP_PORT_DATA |= (1 << XP_CLK); /* clk low */
+      if (message[i] & (1 << j))
+        *XP_PORT_DATA |= (1 << XP_DATA);
+      else
+        *XP_PORT_DATA |= (1 << XP_DATA);
+
+      usleep(sleep_us);
+
+      *XP_PORT_DATA &= ~(1 << XP_CLK); /* clk high */
+      usleep(sleep_us);
+    }
+
+  }
+
+  /* latch enable is an end of transmission latch. Only pulsed shortly */
+  *XP_PORT_DATA |= (1 << XP_LE);
+  (void) *XP_PORT_DATA;
+  *XP_PORT_DATA &= ~(1 << XP_LE);
+}
+
+
 int main() {
-  *P2DDR = ((1 << 4) | (1 << 5) | (1 << 7));
+  *P2DDR = 0xff; /* all ports are outputs */
   *P4DDR = ((1 << 0) | (1 << 3) | 1 << 4);
   *P9DDR = (1 << 5);
   led_num(1);
-  led_caps(1);
 
   for(int i=0; i<5; i++) {
     led_num(1);
@@ -84,12 +136,12 @@ int main() {
     sleep(1);
   }
 
+  send_watchme(2, "\x02\x09\x90", 3);
   power_board();
 
   while(1) {
     led_caps(1);
     sleep(1);
-    led_caps(0);
-    sleep(1);
+    send_watchme(2, "\x02\x09\x90", 3);
   }
 }
