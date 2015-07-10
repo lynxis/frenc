@@ -57,13 +57,12 @@ void power_board() {
   /* !mainoff */
   *P2DR |= (1 << 4);
 
+  /* -KBRC */
   /* FAN On */
-  *P4DDR = (1 << 4);
-  *P4DR |= (1 << 4);
+  /* -batlow */
+  *P4DR |= (1 << 0) | (1 << 4) | (1 << 3);
 
   /* -pwrsw_h8s */
-  *P9DDR = (1 << 5);
-
   *P9DR |= (1 << 5);
   sleep(2);
   *P9DR &= ~(1 << 5);
@@ -73,6 +72,8 @@ void power_board() {
 
 int main() {
   *P2DDR = ((1 << 4) | (1 << 5) | (1 << 7));
+  *P4DDR = ((1 << 0) | (1 << 3) | 1 << 4);
+  *P9DDR = (1 << 5);
   led_num(1);
   led_caps(1);
 
@@ -85,11 +86,10 @@ int main() {
 
   power_board();
 
-  for(int i=0; i<5; i++) {
+  while(1) {
     led_caps(1);
     sleep(1);
     led_caps(0);
     sleep(1);
   }
-
 }
