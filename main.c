@@ -104,15 +104,13 @@ void send_watchme(int sleep_us, char *message, int len) {
     /* byte loop - transmit bit by bit */
     for (short j=7; j >= 0; j--) {
       *XP_PORT_DATA &= ~(1 << XP_CLK); /* clk low */
-      usleep(sleep_us);
-/*
+
       if (message[i] & (1 << j)) {
-        port |= (1 << XP_DATA);
+        *XP_PORT_DATA |= (1 << XP_DATA);
       } else {
-        port &= ~(1 << XP_DATA);
+        *XP_PORT_DATA &= ~(1 << XP_DATA);
       }
-      *XP_PORT_DATA = port;
-*/
+      usleep(sleep_us);
 
       *XP_PORT_DATA |= (1 << XP_CLK); /* clk high */
       usleep(sleep_us);
@@ -120,8 +118,9 @@ void send_watchme(int sleep_us, char *message, int len) {
   }
 
   /* latch enable is an end of transmission latch. Only pulsed shortly */
+  usleep(1);
   *XP_PORT_DATA &= ~(1 << XP_LE);
-  (void) *XP_PORT_DATA;
+  usleep(1);
   *XP_PORT_DATA |= (1 << XP_LE);
 }
 
