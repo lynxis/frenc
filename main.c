@@ -27,6 +27,14 @@
 #define PDDDR ((volatile unsigned char*)  (0xffff4f)) /* Port D Data Direction Register */
 #define PDODR ((volatile unsigned char*)  (0xffff4d)) /* Port D Data Register */
 
+#define SMR_1 (*(volatile unsigned char*)  (0xffff88)) /* Serial 1 Mode */
+#define BRR_1 (*(volatile unsigned char*)  (0xffff89)) /* Serial 1 Bit Rate */
+#define SCR_1 (*(volatile unsigned char*)  (0xffff8a)) /* Serial 1 Serial Control */
+#define TDR_1 (*(volatile unsigned char*)  (0xffff8b)) /* Serial 1 Transmit Data */
+#define SSR_1 (*(volatile unsigned char*)  (0xffff8c)) /* Serial 1 Serial Status */
+#define RDR_1 (*(volatile unsigned char*)  (0xffff8d)) /* Serial 1 Receive Data */
+#define SCMR_1 (*(volatile unsigned char*)  (0xffff8e)) /* Serial 1 Smart Card Mode */
+
 void sleep1s() {
   for (unsigned int j=0; j<65535; j++)
       ;
@@ -57,6 +65,104 @@ void led_num(short state) {
     *P2DR &= ~(1 << 5);
   else
     *P2DR |= (1 << 5);
+}
+
+enum e_baudrate {
+  B4800 = 0,
+  B9600,
+  B19200,
+  B31250,
+  B38400,
+};
+
+struct baudrate {
+  enum e_baudrate baudrate;
+  uint8_t n;
+  uint8_t brr;
+};
+
+static struct baudrate baudrate_10mhz[] = {
+  {.baudrate = B4800, .n = 0, .brr = 64}, /* Error 0.16 % */
+  {.baudrate = B9600, .n = 0, .brr = 32}, /* Error -1.36 % */
+  {.baudrate = B19200, .n = 0, .brr = 15}, /* Error 1.73 % */
+  {.baudrate = B31250, .n = 0, .brr = 9}, /* Error 0.00 % */
+  {.baudrate = B38400, .n = 0, .brr = 8}, /* Error 1.73 % */
+};
+
+static int set_baudrate(enum e_baudrate baudrate) {
+  for(short i=0; i < ARRAY_SIZE(baudrate_10mhz); i++) {
+    if (baudrate_10mhz[i].baudrate != baudrate)
+      continue;
+
+    SMR_1 &= ~SMR_CKS0 & ~SMR_CKS1;
+    SMR_1 |= (baudrate_10mhz[i].n & 0x3);
+
+    BRR_1 = baudrate_10mhz[i].brr;
+
+    return 0;
+  }
+  return 1;
+}
+
+#define SCR_TIE   (1 << 7)
+#define SCR_RIE   (1 << 6)
+#define SCR_TE    (1 << 5)
+#define SCR_RE    (1 << 4)
+#define SCR_MPIE  (1 << 3)
+#define SCR_TEIE  (1 << 2)
+#define SCR_CKE1  (1 << 1)
+#define SCR_CKE0  (1 << 0)
+
+#define SMR_C_nA    (1 << 7) /* communication mode. 0 -> async, 1 -> clocked sync */
+#define SMR_CHR     (1 << 6) /* character lenght 0 -> 8bits, 1 -> 7bits */
+#define SMR_PE      (1 << 5) /* parity enable */
+#define SMR_O_nE    (1 << 4) /* parity mode 0 -> even, 1 -> odd */
+#define SMR_STOP    (1 << 3) /* parirty stop bit lenght 0 -> 1 stop bits, 1 -> 2 stop bits*/
+#define SMR_MP      (1 << 2) /* multiprocess mode enable */
+#define SMR_CKS1    (1 << 1) /* see baudrate calculation */
+#define SMR_CKS0    (1 << 0) /* see baudrate calculation */
+
+int setup_serial(enum e_baudrate baudrate) {
+
+  /* See H8S/2140B Group Hardware Manual
+   * Page 380, Rev. 3.00, Mar 21, 2006 REJ09B0300-0300
+   */
+
+  /* clear Tx/Rx enable bits */
+  SCR_1 &= ~SCR_TE & ~SCR_RE;
+
+  /* CKE0/1 = 0b00
+   * set clock mode to internal clock + release SCK pin */
+  SCR &= ~SCR_CKE0 & ~SCR_CKE1;
+
+  /* no parity
+   * 8 data bits
+   * 1 stop bit
+   * async communication
+   *
+   * speed bits are set by set_baudrate()
+   */
+  SMR = 0;
+  if (set_baudrate(baudrate)) {
+    return 1;
+  }
+
+
+}
+
+void uart_putc(const char str) {
+}
+
+/* will be replaced by chrome ec code */
+int strlen(const char *c) {
+  return 0;
+}
+
+void uart_puts(const char *str) {
+  int len = strlen(str);
+  for (short i=0; i<len; i++) {
+    uart_putc(str[i]);
+  }
 }
 
 void power_board() {
@@ -123,7 +229,6 @@ void send_pmh(int sleep_us, char *message, int len) {
   usleep(1);
   *XP_PORT_DATA |= (1 << XP_LE);
 }
-
 
 int main() {
   *P2DDR = 0xff; /* all ports are outputs */
