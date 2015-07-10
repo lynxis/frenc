@@ -143,11 +143,11 @@ int main() {
 
   while(1) {
     led_caps(1);
-    send_watchme(2, "\x02\x08\x90", 3);
+    send_watchme(2, "\x02\x0f\x90", 3);
     sleep(1);
 
     led_caps(0);
-    send_watchme(2, "\x02\x08\x90", 3);
+    send_watchme(2, "\x02\x0f\x90", 3);
     sleep(1);
 
   }
