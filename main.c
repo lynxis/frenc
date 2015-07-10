@@ -39,6 +39,7 @@ void sleep(int seconds) {
     sleep1s();
 }
 
+/* 2useconds => real 9useconds */
 void usleep(int useconds) {
   while(useconds-- > 0)
     ;
@@ -98,28 +99,30 @@ void send_watchme(int sleep_us, char *message, int len) {
   *XP_PORT_DATA &= ~(1 << XP_OE);
 
   /* message loop - transmit byte by byte */
-  for (int i=0; i < len; i++) {
+  for (short i=0; i < len; i++) {
 
     /* byte loop - transmit bit by bit */
-    for (short j=8; j < 0; i++) {
-      *XP_PORT_DATA |= (1 << XP_CLK); /* clk low */
-      if (message[i] & (1 << j))
-        *XP_PORT_DATA |= (1 << XP_DATA);
-      else
-        *XP_PORT_DATA |= (1 << XP_DATA);
-
+    for (short j=7; j >= 0; j--) {
+      *XP_PORT_DATA &= ~(1 << XP_CLK); /* clk low */
       usleep(sleep_us);
+/*
+      if (message[i] & (1 << j)) {
+        port |= (1 << XP_DATA);
+      } else {
+        port &= ~(1 << XP_DATA);
+      }
+      *XP_PORT_DATA = port;
+*/
 
-      *XP_PORT_DATA &= ~(1 << XP_CLK); /* clk high */
+      *XP_PORT_DATA |= (1 << XP_CLK); /* clk high */
       usleep(sleep_us);
     }
-
   }
 
   /* latch enable is an end of transmission latch. Only pulsed shortly */
-  *XP_PORT_DATA |= (1 << XP_LE);
-  (void) *XP_PORT_DATA;
   *XP_PORT_DATA &= ~(1 << XP_LE);
+  (void) *XP_PORT_DATA;
+  *XP_PORT_DATA |= (1 << XP_LE);
 }
 
 
@@ -127,7 +130,10 @@ int main() {
   *P2DDR = 0xff; /* all ports are outputs */
   *P4DDR = ((1 << 0) | (1 << 3) | 1 << 4);
   *P9DDR = (1 << 5);
+
+  *XP_PORT_DATA |= (1 << XP_OE);
   led_num(1);
+  led_caps(0);
 
   for(int i=0; i<5; i++) {
     led_num(1);
@@ -136,12 +142,14 @@ int main() {
     sleep(1);
   }
 
-  send_watchme(2, "\x02\x09\x90", 3);
-  power_board();
-
   while(1) {
     led_caps(1);
+    send_watchme(2, "\x02\x08\x90", 3);
     sleep(1);
-    send_watchme(2, "\x02\x09\x90", 3);
+
+    led_caps(0);
+    send_watchme(2, "\x02\x08\x90", 3);
+    sleep(1);
+
   }
 }
