@@ -94,7 +94,7 @@ void power_board() {
  * After all bytes are send, shortly pulse the LE pin to high.
  * OE is Low as long we are talking to the chip
  */
-void send_watchme(int sleep_us, char *message, int len) {
+void send_pmh(int sleep_us, char *message, int len) {
   /* OE must be low all the time */
   *XP_PORT_DATA &= ~(1 << XP_OE);
 
@@ -143,11 +143,11 @@ int main() {
 
   while(1) {
     led_caps(1);
-    send_watchme(2, "\x02\x0f\x90", 3);
+    send_pmh(2, "\x02\x0f\x90", 3);
     sleep(1);
 
     led_caps(0);
-    send_watchme(2, "\x02\x0f\x90", 3);
+    send_pmh(2, "\x02\x0f\x90", 3);
     sleep(1);
 
   }
