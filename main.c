@@ -4,6 +4,8 @@
 #define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
 #endif
 
+typedef unsigned char uint8_t;
+
 #define P1DDR	((volatile unsigned char*)	(0xffffb0)) /* Port 1 Data Direction Register */
 #define P2DDR	((volatile unsigned char*)	(0xffffb1)) /* Port 2 Data Direction Register */
 #define P1DR	((volatile unsigned char*)	(0xffffb2)) /* Port 1 Data Register */
