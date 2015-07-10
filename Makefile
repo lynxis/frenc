@@ -1,4 +1,4 @@
-COPT   = -c -ms -mint32 -Wall --std=c99
+COPT   = -c -ms -Wall --std=c99
 ASMOPT = -o
 
 OBJ    = main.o startup.o vectors.o isrhdl.o
