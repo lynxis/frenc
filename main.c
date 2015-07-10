@@ -68,7 +68,7 @@ void sleep(int seconds) {
     sleep1s();
 }
 
-/* 2useconds => real 9useconds */
+/* 1useconds => real 9useconds */
 void usleep(int useconds) {
   while(useconds-- > 0)
     ;
