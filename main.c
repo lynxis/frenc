@@ -35,6 +35,27 @@
 #define RDR_1 (*(volatile unsigned char*)  (0xffff8d)) /* Serial 1 Receive Data */
 #define SCMR_1 (*(volatile unsigned char*)  (0xffff8e)) /* Serial 1 Smart Card Mode */
 
+/* SCI SCL register bit definitions */
+#define SCR_TIE   (1 << 7)
+#define SCR_RIE   (1 << 6)
+#define SCR_TE    (1 << 5)
+#define SCR_RE    (1 << 4)
+#define SCR_MPIE  (1 << 3)
+#define SCR_TEIE  (1 << 2)
+#define SCR_CKE1  (1 << 1)
+#define SCR_CKE0  (1 << 0)
+
+/* SCI SMR register bit definitions */
+#define SMR_C_nA    (1 << 7) /* communication mode. 0 -> async, 1 -> clocked sync */
+#define SMR_CHR     (1 << 6) /* character lenght 0 -> 8bits, 1 -> 7bits */
+#define SMR_PE      (1 << 5) /* parity enable */
+#define SMR_O_nE    (1 << 4) /* parity mode 0 -> even, 1 -> odd */
+#define SMR_STOP    (1 << 3) /* parirty stop bit lenght 0 -> 1 stop bits, 1 -> 2 stop bits*/
+#define SMR_MP      (1 << 2) /* multiprocess mode enable */
+#define SMR_CKS1    (1 << 1) /* see baudrate calculation */
+#define SMR_CKS0    (1 << 0) /* see baudrate calculation */
+
+
 void sleep1s() {
   for (unsigned int j=0; j<65535; j++)
       ;
@@ -104,25 +125,7 @@ static int set_baudrate(enum e_baudrate baudrate) {
   return 1;
 }
 
-#define SCR_TIE   (1 << 7)
-#define SCR_RIE   (1 << 6)
-#define SCR_TE    (1 << 5)
-#define SCR_RE    (1 << 4)
-#define SCR_MPIE  (1 << 3)
-#define SCR_TEIE  (1 << 2)
-#define SCR_CKE1  (1 << 1)
-#define SCR_CKE0  (1 << 0)
-
-#define SMR_C_nA    (1 << 7) /* communication mode. 0 -> async, 1 -> clocked sync */
-#define SMR_CHR     (1 << 6) /* character lenght 0 -> 8bits, 1 -> 7bits */
-#define SMR_PE      (1 << 5) /* parity enable */
-#define SMR_O_nE    (1 << 4) /* parity mode 0 -> even, 1 -> odd */
-#define SMR_STOP    (1 << 3) /* parirty stop bit lenght 0 -> 1 stop bits, 1 -> 2 stop bits*/
-#define SMR_MP      (1 << 2) /* multiprocess mode enable */
-#define SMR_CKS1    (1 << 1) /* see baudrate calculation */
-#define SMR_CKS0    (1 << 0) /* see baudrate calculation */
-
-int setup_serial(enum e_baudrate baudrate) {
+int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
 
   /* See H8S/2140B Group Hardware Manual
    * Page 380, Rev. 3.00, Mar 21, 2006 REJ09B0300-0300
@@ -133,7 +136,7 @@ int setup_serial(enum e_baudrate baudrate) {
 
   /* CKE0/1 = 0b00
    * set clock mode to internal clock + release SCK pin */
-  SCR &= ~SCR_CKE0 & ~SCR_CKE1;
+  SCR_1 &= ~SCR_CKE0 & ~SCR_CKE1;
 
   /* no parity
    * 8 data bits
@@ -142,12 +145,22 @@ int setup_serial(enum e_baudrate baudrate) {
    *
    * speed bits are set by set_baudrate()
    */
-  SMR = 0;
+  SMR_1 = 0;
+
+  /* set to normal operation */
+  SCMR_1 = 0;
+
   if (set_baudrate(baudrate)) {
     return 1;
   }
 
+  /* wait at least 1 bit interval until setting TE/RE T1E/R1E bits */
+  usleep(1000);
 
+  SCR_1 |= SCR_TE | SCR_RE;
+
+  if (enable_interupts)
+    SCR_1 |= SCR_TIE | SCR_RIE | SCR_TEIE;
 }
 
 void uart_putc(const char str) {
