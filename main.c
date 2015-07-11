@@ -164,7 +164,7 @@ struct baudrate {
   uint8_t brr;
 };
 
-static struct baudrate baudrate_10mhz[] = {
+static const struct baudrate baudrate_10mhz[] = {
   {.baudrate = B4800, .n = 0, .brr = 64}, /* Error 0.16 % */
   {.baudrate = B9600, .n = 0, .brr = 32}, /* Error -1.36 % */
   {.baudrate = B19200, .n = 0, .brr = 15}, /* Error 1.73 % */
@@ -228,12 +228,11 @@ int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
 }
 
 void uart_putc(const char c) {
-  if (SSR_1 & SSR_TEND)
-    SSR_1 &= ~SSR_TEND;
-
+  led_num(1);
   /* wait until transmit register is empty */
   while (!(SSR_1 & SSR_TDRE))
     ;
+  led_num(0);
 
   TDR_1 = c;
 
@@ -246,10 +245,10 @@ int strlen(const char *c) {
   return 0;
 }
 
-void uart_puts(const char *str) {
-  int len = strlen(str);
+void uart_puts(const char *str, int len) {
+  //int len = strlen(str);
   for (short i=0; i<len; i++) {
-    uart_putc(str[i]);
+    uart_putc('c');
   }
 }
 
@@ -324,9 +323,27 @@ int main() {
   *P9DDR = (1 << 5);
 
   *XP_PORT_DATA |= (1 << XP_OE);
+
+  /* enable serial interace 1 */
+  MSTPCRL |= MSTPCRL_SCI1;
+  led_caps(0);
+  led_num(0);
   
-  setup_serial(B9600, 0);
-  led_num(1);
+  while (baudrate_10mhz[2].baudrate != B19200) {
+    led_num(0);
+    led_caps(0);
+    sleep(1);
+    led_num(1);
+    led_caps(1);
+    sleep(3);
+  }
+
+  int ret = setup_serial(B9600, 1);
+  while(ret) {
+    led_num(1);
+  }
+
+  led_num(0);
   led_caps(0);
 
   for(int i=0; i<5; i++) {
@@ -337,7 +354,7 @@ int main() {
   }
 
   while(1) {
-    uart_puts("yip");
+    uart_puts("yip", 3);
     led_caps(1);
     send_pmh(2, "\x02\x0f\x90", 3);
     sleep(1);
