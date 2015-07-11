@@ -2,10 +2,10 @@
 #ifndef POWER_H
 #define POWER_H
 
-#define SBYCR       (*(volatile unsigned char*)	(0xffff84)) /* Standby control register */
-#define LPWRCR      (*(volatile unsigned char*)	(0xffff85)) /* Low power control register */
-#define MSTPCRH     (*(volatile unsigned char*)	(0xffff86)) /* Module stop control register H */
-#define MSTPCRL     (*(volatile unsigned char*)	(0xffff87)) /* Module stop control register L */
+#define SBYCR       (*(volatile unsigned char*) (0xffff84)) /* Standby control register */
+#define LPWRCR      (*(volatile unsigned char*) (0xffff85)) /* Low power control register */
+#define MSTPCRH     (*(volatile unsigned char*) (0xffff86)) /* Module stop control register H */
+#define MSTPCRL     (*(volatile unsigned char*) (0xffff87)) /* Module stop control register L */
 
 /* module stop control register */
 #define MSTPCRH_MSTP15 (1 << 7) /* reserved */

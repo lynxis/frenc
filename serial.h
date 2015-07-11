@@ -42,11 +42,11 @@
 
 
 enum e_baudrate {
-  B4800 = 0,
-  B9600,
-  B19200,
-  B31250,
-  B38400,
+	B4800 = 0,
+	B9600,
+	B19200,
+	B31250,
+	B38400,
 };
 
 void uart_putc(const char c);
