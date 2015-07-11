@@ -248,7 +248,7 @@ int strlen(const char *c) {
 void uart_puts(const char *str, int len) {
   //int len = strlen(str);
   for (short i=0; i<len; i++) {
-    uart_putc('c');
+    uart_putc(str[i]);
   }
 }
 
@@ -356,13 +356,6 @@ int main() {
   }
 
   while(1) {
-    P8DR |= (1 << 4);
-    usleep(1);
-    P8DR &= ~(1 << 4);
-    usleep(1);
-    uart_putc('#');
-  }
-  /*{
     uart_puts("yip", 3);
     led_caps(1);
     send_pmh(2, "\x02\x0f\x90", 3);
@@ -372,5 +365,5 @@ int main() {
     send_pmh(2, "\x02\x0f\x90", 3);
     sleep(1);
 
-  }*/
+  }
 }
