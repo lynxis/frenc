@@ -17,7 +17,7 @@ SECTIONS
 	.text 0x200 : {
 		*(.text);
 		*(.rodata);
-		_etext = ALIGN(32);
+		_etext = ALIGN(4);
 	} >rom
 
 	.data : {
