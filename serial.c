@@ -1,6 +1,8 @@
 
-#include <common.h>
-#include <serial.h>
+#include "common.h"
+#include "sleep.h"
+#include "serial.h"
+#include "power.h"
 
 struct baudrate {
 	enum e_baudrate baudrate;
@@ -37,6 +39,9 @@ int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
 	 * Page 380, Rev. 3.00, Mar 21, 2006 REJ09B0300-0300
 	 */
 
+	/* enable serial interace 1 */
+	MSTPCRL &= ~MSTPCRL_SCI1;
+
 	/* clear Tx/Rx enable bits */
 	SCR_1 &= ~SCR_TE & ~SCR_RE;
 
@@ -72,15 +77,19 @@ int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
 }
 
 void uart_putc(const char c) {
-	led_num(1);
 	/* wait until transmit register is empty */
 	while (!(SSR_1 & SSR_TDRE))
 		;
-	led_num(0);
 
 	TDR_1 = c;
 
 	/* clear register empty bit */
 	SSR_1 &= ~SSR_TDRE;
+}
+
+void uart_puts(const char *str, int len) {
+	for (short i=0; i<len; i++) {
+		uart_putc(str[i]);
+	}
 }
 

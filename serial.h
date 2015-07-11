@@ -50,6 +50,7 @@ enum e_baudrate {
 };
 
 void uart_putc(const char c);
+void uart_puts(const char *str, int len);
 int setup_serial(enum e_baudrate baudrate, short enable_interupts);
 
 #endif /* SERIAL_H */

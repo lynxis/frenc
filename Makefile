@@ -1,7 +1,7 @@
 COPT   = -c -ms -Wall --std=c99
 ASMOPT = -o
 
-OBJ    = main.o startup.o vectors.o isrhdl.o
+OBJ    = sleep.o serial.o pmh4.o main.o startup.o vectors.o isrhdl.o
 
 AS := h8300-hms-as
 GCC := h8300-hms-gcc
