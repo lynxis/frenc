@@ -1,10 +1,7 @@
 
-
-#ifndef ARRAY_SIZE
-#define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
-#endif
-
-typedef unsigned char uint8_t;
+#include <common.h>
+#include <serial.h>
+#include <power.h>
 
 #define P1DDR	(*(volatile unsigned char*)	(0xffffb0)) /* Port 1 Data Direction Register */
 #define P2DDR	(*(volatile unsigned char*)	(0xffffb1)) /* Port 2 Data Direction Register */
@@ -28,95 +25,6 @@ typedef unsigned char uint8_t;
 #define P9DR	(*(volatile unsigned char*)	(0xffffc1)) /* Port 9 Data Register */
 #define PDDDR (*(volatile unsigned char*)  (0xffff4f)) /* Port D Data Direction Register */
 #define PDODR (*(volatile unsigned char*)  (0xffff4d)) /* Port D Data Register */
-
-#define SMR_1 (*(volatile unsigned char*)  (0xffff88)) /* Serial 1 Mode */
-#define BRR_1 (*(volatile unsigned char*)  (0xffff89)) /* Serial 1 Bit Rate */
-#define SCR_1 (*(volatile unsigned char*)  (0xffff8a)) /* Serial 1 Serial Control */
-#define TDR_1 (*(volatile unsigned char*)  (0xffff8b)) /* Serial 1 Transmit Data */
-#define SSR_1 (*(volatile unsigned char*)  (0xffff8c)) /* Serial 1 Serial Status */
-#define RDR_1 (*(volatile unsigned char*)  (0xffff8d)) /* Serial 1 Receive Data */
-#define SCMR_1 (*(volatile unsigned char*)  (0xffff8e)) /* Serial 1 Smart Card Mode */
-
-/* SCI SCL register bit definitions */
-#define SCR_TIE   (1 << 7)
-#define SCR_RIE   (1 << 6)
-#define SCR_TE    (1 << 5)
-#define SCR_RE    (1 << 4)
-#define SCR_MPIE  (1 << 3)
-#define SCR_TEIE  (1 << 2)
-#define SCR_CKE1  (1 << 1)
-#define SCR_CKE0  (1 << 0)
-
-/* SCI SMR register bit definitions */
-#define SMR_C_nA    (1 << 7) /* communication mode. 0 -> async, 1 -> clocked sync */
-#define SMR_CHR     (1 << 6) /* character lenght 0 -> 8bits, 1 -> 7bits */
-#define SMR_PE      (1 << 5) /* parity enable */
-#define SMR_O_nE    (1 << 4) /* parity mode 0 -> even, 1 -> odd */
-#define SMR_STOP    (1 << 3) /* parirty stop bit lenght 0 -> 1 stop bits, 1 -> 2 stop bits*/
-#define SMR_MP      (1 << 2) /* multiprocess mode enable */
-#define SMR_CKS1    (1 << 1) /* see baudrate calculation */
-#define SMR_CKS0    (1 << 0) /* see baudrate calculation */
-
-/* SCI SSR register bit definitions */
-#define SSR_TDRE    (1 << 7) /* transmit data register empty */
-#define SSR_RDRF    (1 << 6) /* receive data register full */
-#define SSR_ORER    (1 << 5) /* Overrun Error */
-#define SSR_FER     (1 << 4) /* Framing Error */
-#define SSR_PER     (1 << 3) /* Parity Error */
-#define SSR_TEND    (1 << 2) /* Transmit End */
-#define SSR_MPB     (1 << 1) /* Multiprocessor Bit */
-#define SSR_MPBT    (1 << 0) /* Multiprocessor Bit Transfer */
-
-#define SBYCR       (*(volatile unsigned char*)	(0xffff84)) /* Standby control register */
-#define LPWRCR      (*(volatile unsigned char*)	(0xffff85)) /* Low power control register */
-#define MSTPCRH     (*(volatile unsigned char*)	(0xffff86)) /* Module stop control register H */
-#define MSTPCRL     (*(volatile unsigned char*)	(0xffff87)) /* Module stop control register L */
-
-/* module stop control register */
-#define MSTPCRH_MSTP15 (1 << 7) /* reserved */
-#define MSTPCRH_MSTP14 (1 << 6) /* Data transfer controller (DTC) */
-#define MSTPCRH_MSTP13 (1 << 5) /* 16-bit free-running timer (FRT) */
-#define MSTPCRH_MSTP12 (1 << 4) /* 8-bit timers (TMR_0, TMR1) */
-#define MSTPCRH_MSTP11 (1 << 3) /* 8-bit PWM timer (PWM), 14-bit PWM timer(PWMX) */
-#define MSTPCRH_MSTP10 (1 << 2) /* D/A converter */
-#define MSTPCRH_MSTP9  (1 << 1) /* A/D converter */
-#define MSTPCRH_MSTP8  (1 << 0) /* 8-bit timers (TMR_X, TMR_Y), timer connection*/
-#define MSTPCRL_MSTP7  (1 << 7) /* Serial communication interface_0 (SCI_0) */
-#define MSTPCRL_MSTP6  (1 << 6) /* Serial communication interface_1 (SCI_1) */
-#define MSTPCRL_MSTP5  (1 << 5) /* Serial communication interface_2 (SCI_2) */
-#define MSTPCRL_MSTP4  (1 << 4) /* I2C bus interface_0 (IIC_0) */
-#define MSTPCRL_MSTP3  (1 << 3) /* I2C bus interface_1 (IIC_1) */
-#define MSTPCRL_MSTP2  (1 << 2) /* Host interface (XBS),
-                                   keyboard buffer controller,
-                                   keyboard matrix interrupt mask register (KMIMR)
-                                   keyboard matrix interrupt mask register A (KMIMRA)
-                                   port 6 pull-up MOS control register (KMPCR) */
-#define MSTPCRL_MSTP1  (1 << 1) /* no operations will change */
-#define MSTPCRL_MSTP0  (1 << 0) /* Host interface (LPC)
-                                   wake-up even interupt mask register B (WUEMRB) */
-/* module stop control register function names */
-#define MSTPCRH_MSTP15  (1 << 7) /* reserved */
-#define MSTPCRH_DTC     (1 << 6) /* Data transfer controller (DTC) */
-#define MSTPCRH_FRT     (1 << 5) /* 16-bit free-running timer (FRT) */
-#define MSTPCRH_TMR01   (1 << 4) /* 8-bit timers (TMR_0, TMR1) */
-#define MSTPCRH_PWM     (1 << 3) /* 8-bit PWM timer (PWM), 14-bit PWM timer(PWMX) */
-#define MSTPCRH_DAC     (1 << 2) /* D/A converter */
-#define MSTPCRH_ADC     (1 << 1) /* A/D converter */
-#define MSTPCRH_TMRXY   (1 << 0) /* 8-bit timers (TMR_X, TMR_Y), timer connection*/
-#define MSTPCRL_SCI0    (1 << 7) /* Serial communication interface_0 (SCI_0) */
-#define MSTPCRL_SCI1    (1 << 6) /* Serial communication interface_1 (SCI_1) */
-#define MSTPCRL_SCI2    (1 << 5) /* Serial communication interface_2 (SCI_2) */
-#define MSTPCRL_IIC0    (1 << 4) /* I2C bus interface_0 (IIC_0) */
-#define MSTPCRL_IIC1    (1 << 3) /* I2C bus interface_1 (IIC_1) */
-#define MSTPCRL_XBS_KBD (1 << 2) /* Host interface (XBS),
-                                   keyboard buffer controller,
-                                   keyboard matrix interrupt mask register (KMIMR)
-                                   keyboard matrix interrupt mask register A (KMIMRA)
-                                   port 6 pull-up MOS control register (KMPCR) */
-#define MSTPCRL_NOP     (1 << 1) /* no operations will change */
-#define MSTPCRL_LPC     (1 << 0) /* Host interface (LPC)
-                                   wake-up even interupt mask register B (WUEMRB) */
-
 
 void sleep1s() {
   for (unsigned int j=0; j<65535; j++)
@@ -148,96 +56,6 @@ void led_num(short state) {
     P2DR &= ~(1 << 5);
   else
     P2DR |= (1 << 5);
-}
-
-enum e_baudrate {
-  B4800 = 0,
-  B9600,
-  B19200,
-  B31250,
-  B38400,
-};
-
-struct baudrate {
-  enum e_baudrate baudrate;
-  uint8_t n;
-  uint8_t brr;
-};
-
-static const struct baudrate baudrate_10mhz[] = {
-  {.baudrate = B4800, .n = 0, .brr = 64}, /* Error 0.16 % */
-  {.baudrate = B9600, .n = 0, .brr = 32}, /* Error -1.36 % */
-  {.baudrate = B19200, .n = 0, .brr = 15}, /* Error 1.73 % */
-  {.baudrate = B31250, .n = 0, .brr = 9}, /* Error 0.00 % */
-  {.baudrate = B38400, .n = 0, .brr = 8}, /* Error 1.73 % */
-};
-
-static int set_baudrate(enum e_baudrate baudrate) {
-  for(short i=0; i < ARRAY_SIZE(baudrate_10mhz); i++) {
-    if (baudrate_10mhz[i].baudrate != baudrate)
-      continue;
-
-    SMR_1 &= ~SMR_CKS0 & ~SMR_CKS1;
-    SMR_1 |= (baudrate_10mhz[i].n & 0x3);
-
-    BRR_1 = baudrate_10mhz[i].brr;
-
-    return 0;
-  }
-  return 1;
-}
-
-int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
-
-  /* See H8S/2140B Group Hardware Manual
-   * Page 380, Rev. 3.00, Mar 21, 2006 REJ09B0300-0300
-   */
-
-  /* clear Tx/Rx enable bits */
-  SCR_1 &= ~SCR_TE & ~SCR_RE;
-
-  /* CKE0/1 = 0b00
-   * set clock mode to internal clock + release SCK pin */
-  SCR_1 &= ~SCR_CKE0 & ~SCR_CKE1;
-
-  /* no parity
-   * 8 data bits
-   * 1 stop bit
-   * async communication
-   *
-   * speed bits are set by set_baudrate()
-   */
-  SMR_1 = 0;
-
-  /* set to normal operation */
-  SCMR_1 = 0;
-
-  if (set_baudrate(baudrate)) {
-    return 1;
-  }
-
-  /* wait at least 1 bit interval until setting TE/RE T1E/R1E bits */
-  usleep(1000);
-
-  SCR_1 |= SCR_TE | SCR_RE;
-
-  if (enable_interupts)
-    SCR_1 |= SCR_TIE | SCR_RIE | SCR_TEIE;
-
-  return 0;
-}
-
-void uart_putc(const char c) {
-  led_num(1);
-  /* wait until transmit register is empty */
-  while (!(SSR_1 & SSR_TDRE))
-    ;
-  led_num(0);
-
-  TDR_1 = c;
-
-  /* clear register empty bit */
-  SSR_1 &= ~SSR_TDRE;
 }
 
 /* will be replaced by chrome ec code */
@@ -331,15 +149,6 @@ int main() {
   led_caps(0);
   led_num(0);
   
-  while (baudrate_10mhz[2].baudrate != B19200) {
-    led_num(0);
-    led_caps(0);
-    sleep(1);
-    led_num(1);
-    led_caps(1);
-    sleep(3);
-  }
-
   int ret = setup_serial(B9600, 1);
   while(ret) {
     led_num(1);
