@@ -57,6 +57,16 @@ typedef unsigned char uint8_t;
 #define SMR_CKS1    (1 << 1) /* see baudrate calculation */
 #define SMR_CKS0    (1 << 0) /* see baudrate calculation */
 
+/* SCI SSR register bit definitions */
+#define SSR_TDRE    (1 << 7) /* transmit data register empty */
+#define SSR_RDRF    (1 << 6) /* receive data register full */
+#define SSR_ORER    (1 << 5) /* Overrun Error */
+#define SSR_FER     (1 << 4) /* Framing Error */
+#define SSR_PER     (1 << 3) /* Parity Error */
+#define SSR_TEND    (1 << 2) /* Transmit End */
+#define SSR_MPB     (1 << 1) /* Multiprocessor Bit */
+#define SSR_MPBT    (1 << 0) /* Multiprocessor Bit Transfer */
+
 
 void sleep1s() {
   for (unsigned int j=0; j<65535; j++)
@@ -167,7 +177,18 @@ int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
   return 0;
 }
 
-void uart_putc(const char str) {
+void uart_putc(const char c) {
+  if (SSR_1 & SSR_TEND)
+    SSR_1 &= ~SSR_TEND;
+
+  /* wait until transmit register is empty */
+  while (!(SSR_1 & SSR_TDRE))
+    ;
+
+  TDR_1 = c;
+
+  /* clear register empty bit */
+  SSR_1 &= ~SSR_TDRE;
 }
 
 /* will be replaced by chrome ec code */
@@ -253,6 +274,8 @@ int main() {
   *P9DDR = (1 << 5);
 
   *XP_PORT_DATA |= (1 << XP_OE);
+  
+  setup_serial(B9600, 0);
   led_num(1);
   led_caps(0);
 
@@ -264,6 +287,7 @@ int main() {
   }
 
   while(1) {
+    uart_puts("yip");
     led_caps(1);
     send_pmh(2, "\x02\x0f\x90", 3);
     sleep(1);
