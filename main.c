@@ -163,6 +163,8 @@ int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
 
   if (enable_interupts)
     SCR_1 |= SCR_TIE | SCR_RIE | SCR_TEIE;
+
+  return 0;
 }
 
 void uart_putc(const char str) {
