@@ -63,6 +63,8 @@ int main() {
 		sleep(1);
 	}
 
+	power_board();
+
 	while(1) {
 		uart_puts("yip", 3);
 		led_caps(1);
