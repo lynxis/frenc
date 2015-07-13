@@ -5,6 +5,8 @@
 #include "power.h"
 #include "gpio.h"
 
+#include "pmh4.h"
+
 void led_caps(short state) {
 	if (state)
 		P2DR &= ~(1 << 7);
