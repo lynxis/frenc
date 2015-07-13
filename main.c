@@ -19,11 +19,6 @@ void led_num(short state) {
 		P2DR |= (1 << 5);
 }
 
-/* will be replaced by chrome ec code */
-int strlen(const char *c) {
-	return 0;
-}
-
 void power_board() {
 	/* !mainoff */
 	P2DR |= (1 << 4);
