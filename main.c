@@ -39,13 +39,11 @@ void power_board() {
 }
 
 int main() {
-	P2DDR = 0xff; /* all ports are outputs */
-	P4DDR = ((1 << 0) | (1 << 3) | 1 << 4);
+	P2DDR = 0xf0; /* -MAINOFF  -LEDNUMPAD -BAYLED -LEDCAPSLOCK */
+	P4DDR = ((1 << 0) | (1 << 3) | 1 << 4); /* -KBRC -BATLOW FANON */
 	P9DDR = (1 << 5);
 
-	P8DDR = (1 << 4); /* TXD1 output */
-
-	XP_PORT_DATA &= ~(1 << XP_OE);
+	P8DDR = (1 << 1) | (1 << 4); /* TXD1 output */
 
 	led_caps(0);
 	led_num(0);
@@ -70,12 +68,9 @@ int main() {
 	while(1) {
 		uart_puts("yip", 3);
 		led_caps(1);
-		send_pmh(2, "\x02\x0f\x90", 3);
 		sleep(1);
 
 		led_caps(0);
-		send_pmh(2, "\x02\x0f\x90", 3);
 		sleep(1);
-
 	}
 }
