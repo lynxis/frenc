@@ -1,17 +1,12 @@
 
 #include "gpio.h"
 #include "sleep.h"
+#include "pmh4.h"
 
 /* send a simple hello to the board
  * 1 / (sleep_us*2) = frequency.
  */
 
-/* data direction must be set to output seperate*/
-#define XP_CLK 0
-#define XP_DATA 1
-#define XP_LE 2
-#define XP_OE 3
-#define XP_PORT_DATA P2DR
 
 /* bit bang the XP (extra protocol? :)
  *
