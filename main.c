@@ -5,6 +5,7 @@
 #include "power.h"
 #include "gpio.h"
 
+#include "adc.h"
 #include "pmh4.h"
 
 void led_caps(short state) {
@@ -55,6 +56,10 @@ int main() {
 
 	led_num(0);
 	led_caps(0);
+	enable_dac(0, 1);
+	enable_dac(1, 1);
+	set_dac(0, 120);
+	set_dac(1, 120);
 
 	for(int i=0; i<5; i++) {
 		led_num(1);
