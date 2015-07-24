@@ -22,10 +22,6 @@
 #define LPC_HICR1_LSMIB		(1 << 1)
 #define LPC_HICR1_LSCIB		(1 << 0)
 
-
-#define LPC_LADR3H		(*(volatile unsigned char*) (0xffffFF)) /*  */
-#define LPC_LADR3L		(*(volatile unsigned char*) (0xffffFF)) /*  */
-
 #define LPC_TMR0MW		(*(volatile unsigned char*) (0xfffe20)) /* Bidirectional data register  0MW */
 #define LPC_TWR0SW		(*(volatile unsigned char*) (0xfffe20)) /* Bidirectional data register  0SW */
 #define LPC_TWR1		(*(volatile unsigned char*) (0xfffe21)) /* Bidirectional data register  1 */
