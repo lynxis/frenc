@@ -59,4 +59,7 @@
 #define LPC_HICR2		(*(volatile unsigned char*) (0xfffe3e)) /* Host interface control register 2 */
 #define LPC_HICR3		(*(volatile unsigned char*) (0xfffe3e)) /* Host interface control register 3 */
 
+void enable_lpc(int channel);
+void lpc_set_channel3_address(uint16_t address, uint8_t twr_enable);
+
 #endif /* LPC_H */
