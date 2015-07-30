@@ -9,3 +9,17 @@
 ## flash
 - cp blinkled blinkled.mot
 - use renesas flash tool kit (or any other working flash tool with application)
+
+# how the irqs are handled?
+The original IRQ vector is located at 0x0 - 0x200 in flash.
+The hardware direct use these address as PC and they aren't changable besides from erasing the flash.
+There are proxy functions which use 512byte of RAM as vector address instead of flash. See linker script for additional infos.
+
+## ? Is there any register containing the IRQ number?
+* The last 512 byte in RAM are reserved for IRQ address.
+
+* H8S jumps into routines at 0x0 - 0x200 (flash)
+* jumps into proxy routines
+* proxy routine look into RAM at address 0x<HARDWARE DEPEND>,
+    if vector data is  0xffff ffff or 0x0 then return otherwise jump into address
+This cost around XX kb of flash and is easy replacable by hardware irq, because it looks the same from point of application.

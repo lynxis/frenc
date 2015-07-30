@@ -45,6 +45,29 @@ data_init_loop:
         cmp.l   er1,er0                 ; test for done
         blo     data_init_loop
 
+; inti ram vectors
+; ramvectors must be direct behind data. do not touch er2! it's used later when copying the ramvector into place
+; first make sane vector values
+ramvector_write_0xff:
+        mov.l   #_ram_vectors,er0       ; start of RAM vectors
+        mov.l   #_eram_vectors,er1      ; end of RAM vectors
+        ; check if ram_vectors are empty and skip to bss_init
+        cmp.l   er1, er0
+        blo     bss_init_loop
+ramvector_write_0xff_loop:
+        mov.w   #0xffff, @er0
+        adds    #2, er0
+        cmp.l   er1,er0
+        blo     ramvector_write_0xff_loop
+        mov.l   #_ram_vectors,er0       ; reset er0 to start of RAM vectors
+ramvector_copy_loop:
+        mov.w   @er2,r3                 ; get next word
+        mov.w   r3,@er0                 ; move it
+        adds    #2,er2                  ; increment source ptr
+        adds    #2,er0                  ; increment destination ptr
+        cmp.l   er1,er0                 ; test for done
+        blo     ramvector_copy_loop
+
 ; zero out .bss ram data area
         mov.l   #_bss,er0               ; start of RAM .bss section
         mov.l   #_ebss,er1              ; end of RAM .bss section

@@ -7,7 +7,8 @@ ENTRY(_startp)
 MEMORY
 {
 	rom (rx) : ORIGIN = 0x0, LENGTH = 128K
-	ram (!rx): ORIGIN = 0xffe080, LENGTH = 3968
+	ramvector(!rx): ORIGIN = 0xffe080, LENGTH = 512 /* this is really ram, but used by us for irq vectors because they can not changed in rom */
+	ram (!rx): ORIGIN = 0xffe280, LENGTH = 3456
 	tiny (!rx): ORIGIN = 0xffff00, LENGTH = 128
 }
 
@@ -23,8 +24,14 @@ SECTIONS
 	.data : {
 		_data = .;
 		*(.data);
-		_edata = .;
+		_edata = ALIGN(4);
 	} >ram AT>rom
+
+	.ram_vectors : {
+			_ram_vectors = .;
+			*(.ram_vectors);
+			_eram_vectors = ALIGN(4);
+	} >ramvector AT>rom
 
 	.bss : {
 		_bss = .;
