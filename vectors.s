@@ -14,7 +14,7 @@
         .long _unused_isr        ;  4 Reserved
         .long _unused_isr        ;  5 Trace
         .long _unused_isr        ;  6 Reserved
-        .long _unused_isr        ;  7 External Interrupt (NMI)
+        .long _toram007_isr      ;  7 External Interrupt (NMI)
         .long _unused_isr        ;  8 Trap Instruction A 0
         .long _unused_isr        ;  9 Trap Instruction A 1
         .long _unused_isr        ; 10 Trap Instruction A 2
@@ -23,14 +23,14 @@
         .long _unused_isr        ; 13 Trap Instruction A 5
         .long _unused_isr        ; 14 Trap Instruction A 6
         .long _unused_isr        ; 15 Trap Instruction A 7
-        .long _unused_isr        ; 16 IRQ0 (External Pin)
-        .long _unused_isr        ; 17 IRQ1 (External Pin)
-        .long _unused_isr        ; 18 IRQ2 (External Pin)
-        .long _unused_isr        ; 19 IRQ3 (External Pin)
-        .long _unused_isr        ; 20 IRQ4 (External Pin)
-        .long _unused_isr        ; 21 IRQ5 (External Pin)
-        .long _unused_isr        ; 22 IRQ6 (External Pin)
-        .long _unused_isr        ; 23 IRQ7 (External Pin)
+        .long _toram016_isr      ; 16 IRQ0 (External Pin)
+        .long _toram017_isr      ; 17 IRQ1 (External Pin)
+        .long _toram018_isr      ; 18 IRQ2 (External Pin)
+        .long _toram019_isr      ; 19 IRQ3 (External Pin)
+        .long _toram020_isr      ; 20 IRQ4 (External Pin)
+        .long _toram021_isr      ; 21 IRQ5 (External Pin)
+        .long _toram022_isr      ; 22 IRQ6 (External Pin)
+        .long _toram023_isr      ; 23 IRQ7 (External Pin)
         .long _unused_isr        ; 24 SWDTEND Software Activation Interrupt End (DTC)
         .long _unused_isr        ; 25 WOVI0 Interval Timer (Watchdog Timer 0)
         .long _unused_isr        ; 26 CMI Refresh Timer
@@ -87,10 +87,10 @@
         .long _unused_isr        ; 77 Reserved
         .long _unused_isr        ; 78 Reserved
         .long _unused_isr        ; 79 Reserved
-        .long _unused_isr        ; 80 ERI0 Receive Error 0 (SCI Channel 0)
-        .long _unused_isr        ; 81 RXI0 Reception Completed 0 (SCI Channel 0)
-        .long _unused_isr        ; 82 TXI0 Transmit Data Empty 0 (SCI Channel 0)
-        .long _unused_isr        ; 83 TEI0 Transmission End 0 (SCI Channel 0)
+        .long _toram080_isr        ; 80 ERI0 Receive Error 0 (SCI Channel 0)
+        .long _toram081_isr        ; 81 RXI0 Reception Completed 0 (SCI Channel 0)
+        .long _toram082_isr        ; 82 TXI0 Transmit Data Empty 0 (SCI Channel 0)
+        .long _toram083_isr        ; 83 TEI0 Transmission End 0 (SCI Channel 0)
         .long _unused_isr        ; 84 ERI1 Receive Error 1 (SCI Channel 1)
         .long _unused_isr        ; 85 RXI1 Reception Completed 1 (SCI Channel 1)
         .long _unused_isr        ; 86 TXI1 Transmit Data Empty 1 (SCI Channel 1)
@@ -105,11 +105,11 @@
         .long _unused_isr        ; 95 Reserved
         .long _unused_isr        ; 96 CMIA1 Compare Match A3 (8-Bit Timer Channel 3)
         .long _unused_isr        ; 97 CMIB1 Compare Match B3 (8-Bit Timer Channel 3)
-        .long _unused_isr        ; 98 OVI1 Overflow 3 (8-Bit Timer Channel 3)
+        .long _toram098_isr      ; 98 OVI1 Overflow 3 (8-Bit Timer Channel 3)
         .long _unused_isr        ; 99 Reserved
-        .long _unused_isr        ;100 IICI0 1 Byte Transmission/Reception Completed (IIC Channel 0) Optional
+        .long _toram100_isr      ;100 IICI0 1 Byte Transmission/Reception Completed (IIC Channel 0) Optional
         .long _unused_isr        ;101 DDCSW1 Format Switch (IIC Channel 0) Optional
-        .long _unused_isr        ;102 IICI1 1 Byte Transmission/Reception Completed (IIC Channel 1) Optional
+        .long _toram102_isr      ;102 IICI1 1 Byte Transmission/Reception Completed (IIC Channel 1) Optional
         .long _unused_isr        ;103 Reserved
         .long _unused_isr        ;104 Reserved
         .long _unused_isr        ;105 Reserved
