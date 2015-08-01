@@ -7,7 +7,7 @@ ENTRY(_startp)
 MEMORY
 {
 	rom (rx) : ORIGIN = 0x0, LENGTH = 128K
-	ramvector(!rx): ORIGIN = 0xffe080, LENGTH = 512 /* this is really ram, but used by us for irq vectors because they can not changed in rom */
+	ramvector(rx): ORIGIN = 0xffe080, LENGTH = 512 /* this is really ram, but used by us for irq vectors because they can not changed in rom */
 	ram (!rx): ORIGIN = 0xffe280, LENGTH = 3456
 	tiny (!rx): ORIGIN = 0xffff00, LENGTH = 128
 }
