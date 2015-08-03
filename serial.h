@@ -2,6 +2,14 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
+#define SMR_0 (*(volatile unsigned char*)  (0xffffd8)) /* Serial 0 Mode */
+#define BRR_0 (*(volatile unsigned char*)  (0xffffd9)) /* Serial 0 Bit Rate */
+#define SCR_0 (*(volatile unsigned char*)  (0xffffda)) /* Serial 0 Serial Control */
+#define TDR_0 (*(volatile unsigned char*)  (0xffffdb)) /* Serial 0 Transmit Data */
+#define SSR_0 (*(volatile unsigned char*)  (0xffffdc)) /* Serial 0 Serial Status */
+#define RDR_0 (*(volatile unsigned char*)  (0xffffdd)) /* Serial 0 Receive Data */
+#define SCMR_0 (*(volatile unsigned char*)  (0xffffde)) /* Serial 0 Smart Card Mode */
+
 #define SMR_1 (*(volatile unsigned char*)  (0xffff88)) /* Serial 1 Mode */
 #define BRR_1 (*(volatile unsigned char*)  (0xffff89)) /* Serial 1 Bit Rate */
 #define SCR_1 (*(volatile unsigned char*)  (0xffff8a)) /* Serial 1 Serial Control */
