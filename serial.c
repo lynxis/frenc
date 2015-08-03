@@ -4,6 +4,11 @@
 #include "serial.h"
 #include "power.h"
 
+#include "ringbuffer.h"
+
+#define UART_RXBUFFERSIZE 128
+#define UART_TXBUFFERSIZE 128
+
 struct baudrate {
 	enum e_baudrate baudrate;
 	uint8_t n;
@@ -93,3 +98,53 @@ void uart_puts(const char *str, int len) {
 	}
 }
 
+static uint8_t receive_buffer[UART_RXBUFFERSIZE];
+static uint8_t transmit_buffer[UART_TXBUFFERSIZE];
+
+static struct ringbuffer_t txring = {
+  .start = transmit_buffer,
+  .last = transmit_buffer + UART_TXBUFFERSIZE,
+  .read = transmit_buffer,
+  .write = transmit_buffer,
+  .status = 0,
+};
+
+static struct ringbuffer_t rxring = {
+  .start = receive_buffer,
+  .last = receive_buffer + UART_RXBUFFERSIZE,
+  .read = receive_buffer,
+  .write = receive_buffer,
+  .status = 0,
+};
+
+/* TODO: error handling? */
+void eri1_irq() {
+  if (SSR_1 & SSR_ORER) {
+    SSR_1 &= ~(SSR_ORER | SSR_RDRF);
+  } else if(SSR_1 & SSR_PER) {
+    SSR_1 &= ~SSR_PER;
+  } else if(SSR_1 & SSR_FER) {
+    SSR_1 &= ~SSR_FER;
+  }
+}
+
+void rxi1_irq() {
+  if (!(SSR_1 & SSR_RDRF))
+    return; /* receive data register full isn't set */
+
+  ringbuffer_write(&rxring, RDR_1);
+  SSR_1 & ~SSR_RDRF;
+}
+
+/* called when transfered one byte */
+void txi1_irq() {
+  if (!ring_is_readable(&rxring))
+    return;
+}
+
+void uart_getc() {
+  if (!ring_is_readable(&rxring))
+    ;
+  SCR_1 &= ~SCR_RIE;
+
+}
