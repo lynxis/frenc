@@ -27,3 +27,11 @@ void print_size_u32() {
 		uart_putc('E');
 	}
 }
+
+void print_size_pointer() {
+	int i = sizeof(uint32_t *);
+	uart_puts("Size of 32p", 11);
+	while (i--) {
+		uart_putc('R');
+	}
+}

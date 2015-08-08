@@ -46,6 +46,7 @@ int main() {
 	print_size_u8();
 	print_size_u16();
 	print_size_u32();
+	print_size_pointer();
 
 	led_num(0);
 	led_caps(0);
