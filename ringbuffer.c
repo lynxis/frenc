@@ -43,3 +43,7 @@ int ringbuffer_write(struct ringbuffer_t *ring, uint8_t write) {
 	increase_write_pointer(ring);
 	return 0;
 }
+
+inline int ring_is_readable(struct ringbuffer_t *ring) {
+	return (ring->read == ring->write) ? 0 : 1;
+}
