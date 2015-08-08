@@ -1,14 +1,20 @@
-         .h8300s
+.h8300s
 
-         ; shadow vector table location
-         .global _unused_isr
+.global _unused_isr
+.global _rxi1_isr
+.global _eri1_isr
+.extern _rxi1_irq
+.extern _eri1_irq
+.section .text
 
-         .section .text
+_unused_isr:
+  rte
 
+_eri1_isr:
+  jsr @_eri1_irq
+  rte
 
- _unused_isr:                            ; Unused interrupt vector: generate
-                                         ; an error if this interrupt occurs
-         rte
-
-
-         .end
+_rxi1_isr:
+  jsr @_rxi1_irq
+  rte
+  .end
