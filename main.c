@@ -6,23 +6,10 @@
 #include "gpio.h"
 
 #include "adc.h"
+#include "led.h"
 #include "pmh4.h"
 
 #include "test.h"
-
-void led_caps(short state) {
-	if (state)
-		P2DR &= ~(1 << 7);
-	else
-		P2DR |= (1 << 7);
-}
-
-void led_num(short state) {
-	if (state)
-		P2DR &= ~(1 << 5);
-	else
-		P2DR |= (1 << 5);
-}
 
 void power_board() {
 	/* !mainoff */
