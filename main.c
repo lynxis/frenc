@@ -8,6 +8,8 @@
 #include "adc.h"
 #include "pmh4.h"
 
+#include "test.h"
+
 void led_caps(short state) {
 	if (state)
 		P2DR &= ~(1 << 7);
@@ -53,6 +55,10 @@ int main() {
 	while(ret) {
 		led_num(1);
 	}
+
+	print_size_u8();
+	print_size_u16();
+	print_size_u32();
 
 	led_num(0);
 	led_caps(0);
