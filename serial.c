@@ -184,3 +184,27 @@ void uart_put_u32(uint32_t value) {
 	uart_put_u16(value & 0xffff);
 }
 
+void uart_put_pointer(void *value) {
+	uart_put_u32((uint32_t)value);
+}
+
+static void uart_print_ringbuffer(struct ringbuffer_t *ring) {
+	uart_puts("=ringbuffer\n", 11);
+	uart_puts("st ", 3);
+	uart_put_pointer(ring->start);
+	uart_puts("la ", 3);
+	uart_put_pointer(ring->last);
+	uart_puts("rd ", 3);
+	uart_put_pointer(ring->read);
+	uart_puts("wr ", 3);
+	uart_put_pointer(ring->write);
+}
+
+void uart_print_rx_ringbuffer() {
+	uart_print_ringbuffer(&rxring);
+}
+
+void uart_print_tx_ringbuffer() {
+	uart_print_ringbuffer(&txring);
+}
+

@@ -64,5 +64,9 @@ int setup_serial(enum e_baudrate baudrate, short enable_interupts);
 void uart_put_u8(uint8_t value);
 void uart_put_u16(uint16_t value);
 void uart_put_u32(uint32_t value);
+void uart_put_pointer(void *value);
+
+void uart_print_rx_ringbuffer();
+void uart_print_tx_ringbuffer();
 
 #endif /* SERIAL_H */
