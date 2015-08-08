@@ -5,6 +5,7 @@
 #include "power.h"
 
 #include "ringbuffer.h"
+#include "led.h"
 
 #define UART_RXBUFFERSIZE 128
 #define UART_TXBUFFERSIZE 128
@@ -142,10 +143,18 @@ void txi1_irq() {
     return;
 }
 
-void uart_getc() {
-  if (!ring_is_readable(&rxring))
-    ;
+int uart_getc(char *ch) {
+  int ret;
+  if (!ring_is_readable(&rxring)) {
+    *ch = 0xa8;
+    return 1;
+  }
   SCR_1 &= ~SCR_RIE;
+  ret = ringbuffer_read(&rxring, ch);
+  SCR_1 |= SCR_RIE;
+
+	return ret;
+}
 
 static inline uint8_t getlow(uint8_t value) {
 	value = value & 0xf;
@@ -174,3 +183,4 @@ void uart_put_u32(uint32_t value) {
 	uart_put_u16(value >> 16);
 	uart_put_u16(value & 0xffff);
 }
+
