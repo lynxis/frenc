@@ -104,7 +104,7 @@ static uint8_t transmit_buffer[UART_TXBUFFERSIZE];
 
 static struct ringbuffer_t txring = {
   .start = transmit_buffer,
-  .last = transmit_buffer + UART_TXBUFFERSIZE,
+  .last = transmit_buffer + UART_TXBUFFERSIZE - 1,
   .read = transmit_buffer,
   .write = transmit_buffer,
   .status = 0,
@@ -112,7 +112,7 @@ static struct ringbuffer_t txring = {
 
 static struct ringbuffer_t rxring = {
   .start = receive_buffer,
-  .last = receive_buffer + UART_RXBUFFERSIZE,
+  .last = receive_buffer + UART_RXBUFFERSIZE - 1,
   .read = receive_buffer,
   .write = receive_buffer,
   .status = 0,
