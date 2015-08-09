@@ -54,6 +54,9 @@ int main() {
 	enable_dac(1, 1);
 	set_dac(0, 120);
 	set_dac(1, 120);
+	uart_print_rx_ringbuffer();
+	uart_puts("TX\n", 3);
+	uart_print_tx_ringbuffer();
 
 	for(int i=0; i<5; i++) {
 		led_num(1);

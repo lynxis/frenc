@@ -190,6 +190,8 @@ void uart_put_pointer(void *value) {
 
 static void uart_print_ringbuffer(struct ringbuffer_t *ring) {
 	uart_puts("=ringbuffer\n", 11);
+	uart_puts("po ", 3);
+	uart_put_pointer(ring);
 	uart_puts("st ", 3);
 	uart_put_pointer(ring->start);
 	uart_puts("la ", 3);
