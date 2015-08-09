@@ -6,6 +6,10 @@ OBJ    = test.o ringbuffer.o led.o sleep.o serial.o pmh4.o main.o startup.o vect
 AS := h8300-hms-as
 GCC := h8300-hms-gcc
 OBJCOPY := h8300-hms-objcopy
+OBJDUMP := h8300-hms-objdump
+
+blinkled.mot: blinkled
+	$(OBJCOPY) -O srec blinkled blinkled.mot
 
 blinkled: $(OBJ)
 	$(GCC) -ms -nostdlib -T linkscript.x -o $@ $^
