@@ -158,7 +158,7 @@ int uart_getc(char *ch) {
 
 static inline uint8_t getlow(uint8_t value) {
 	value = value & 0xf;
-	if (value < 9)
+	if (value < 10)
 		return '0' + value;
 	else
 		return 'a' + value - 10;
