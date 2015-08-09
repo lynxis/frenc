@@ -165,13 +165,11 @@ static inline uint8_t getlow(uint8_t value) {
 }
 
 void uart_put_u8(uint8_t value) {
-	uart_putc('x');
 	uart_putc(getlow(value >> 4));
 	uart_putc(getlow(value));
 }
 
 void uart_put_u16(uint16_t value) {
-	uart_putc('x');
 	uart_putc(getlow((value >> 12) & 0xf));
 	uart_putc(getlow((value >> 8) & 0xf));
 	uart_putc(getlow((value >> 4) & 0xf));
@@ -179,7 +177,6 @@ void uart_put_u16(uint16_t value) {
 }
 
 void uart_put_u32(uint32_t value) {
-	uart_putc('x');
 	uart_put_u16(value >> 16);
 	uart_put_u16(value & 0xffff);
 }
