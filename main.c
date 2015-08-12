@@ -47,6 +47,7 @@ int main() {
 	print_size_u16();
 	print_size_u32();
 	print_size_pointer();
+	dump_memory((void *)0xffe080, 3*32);
 
 	led_num(0);
 	led_caps(0);

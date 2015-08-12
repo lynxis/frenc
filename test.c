@@ -35,3 +35,18 @@ void print_size_pointer() {
 		uart_putc('R');
 	}
 }
+
+void dump_memory(uint8_t *start, int len) {
+	uart_puts("memory dump\r\n", 13);
+	for (int i=0; i < len; i++) {
+		uart_put_u8(*start);
+		start++;
+		if(i % 32 == 0) {
+			uart_putc('\r');
+			uart_putc('\n');
+		} else if (i % 4 == 0) {
+			uart_putc(' ');
+		}
+	}
+	uart_puts("\r\nend\r\n", 7);
+}
