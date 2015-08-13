@@ -99,6 +99,11 @@ void uart_puts(const char *str, int len) {
 	}
 }
 
+void uart_enable_rx() {
+	SCR_1 |=  SCR_RIE | SCR_RE;
+	eri1_irq();
+}
+
 static uint8_t receive_buffer[UART_RXBUFFERSIZE];
 static uint8_t transmit_buffer[UART_TXBUFFERSIZE];
 
