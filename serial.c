@@ -153,21 +153,25 @@ void rxi1_irq() {
 
 /* called when transfered one byte */
 void txi1_irq() {
-  if (!ring_is_readable(&rxring))
-    return;
+	if (!ring_is_readable(&rxring))
+		return;
 }
 
 int uart_getc(char *ch) {
-  int ret;
-  if (!ring_is_readable(&rxring)) {
-    *ch = 0xa8;
-    return 1;
-  }
-  SCR_1 &= ~SCR_RIE;
-  ret = ringbuffer_read(&rxring, ch);
-  SCR_1 |= SCR_RIE;
+	int ret;
+	if (!ring_is_readable(&rxring)) {
+		*ch = 0xa8;
+		return 1;
+	}
+	SCR_1 &= ~SCR_RIE;
+	ret = ringbuffer_read(&rxring, ch);
+	SCR_1 |= SCR_RIE;
 
 	return ret;
+}
+
+int uart_readable() {
+	return ring_is_readable(&rxring);
 }
 
 static inline uint8_t getlow(uint8_t value) {
