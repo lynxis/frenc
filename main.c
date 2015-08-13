@@ -37,6 +37,12 @@ int main() {
 
 	led_caps(0);
 	led_num(0);
+	for(int i=0; i<3; i++) {
+		led_caps(1);
+		sleep(1);
+		led_caps(0);
+		sleep(1);
+	}
 
 	int ret = setup_serial(B9600, 1);
 	while(ret) {
