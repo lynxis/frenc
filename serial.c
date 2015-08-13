@@ -149,6 +149,9 @@ void rxi1_irq() {
 	}
 }
 
+void debug_irq() {
+	uart_puts('D');
+	uart_put_u16(SCR_1);
 }
 
 /* called when transfered one byte */
@@ -225,3 +228,12 @@ void uart_print_tx_ringbuffer() {
 	uart_print_ringbuffer(&txring);
 }
 
+void uart_read_poll() {
+	int uartread = 10;
+	while (uartread--) {
+		if (SSR_1 & SSR_RDRF) {
+			uart_putc(RDR_1);
+			SSR_1 &= ~(SSR_ORER | SSR_FER | SSR_PER | SSR_RDRF);
+		}
+	}
+}
