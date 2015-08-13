@@ -6,7 +6,7 @@
 
 void print_size_u8() {
 	int i = sizeof(uint8_t);
-	uart_puts("Size of 8", 9);
+	uart_puts("Size of 8");
 	while (i--) {
 		uart_putc('Q');
 	}
@@ -14,7 +14,7 @@ void print_size_u8() {
 
 void print_size_u16() {
 	int i = sizeof(uint16_t);
-	uart_puts("Size of 16", 10);
+	uart_puts("Size of 16");
 	while (i--) {
 		uart_putc('W');
 	}
@@ -22,7 +22,7 @@ void print_size_u16() {
 
 void print_size_u32() {
 	int i = sizeof(uint32_t);
-	uart_puts("Size of 32", 10);
+	uart_puts("Size of 32");
 	while (i--) {
 		uart_putc('E');
 	}
@@ -30,14 +30,14 @@ void print_size_u32() {
 
 void print_size_pointer() {
 	int i = sizeof(uint32_t *);
-	uart_puts("Size of 32p", 11);
+	uart_puts("Size of 32p");
 	while (i--) {
 		uart_putc('R');
 	}
 }
 
 void dump_memory(uint8_t *start, int len) {
-	uart_puts("memory dump\r\n", 13);
+	uart_puts("memory dump\r\n");
 	for (int i=0; i < len; i++) {
 		uart_put_u8(*start);
 		start++;
@@ -48,5 +48,5 @@ void dump_memory(uint8_t *start, int len) {
 			uart_putc(' ');
 		}
 	}
-	uart_puts("\r\nend\r\n", 7);
+	uart_puts("\r\nend\r\n");
 }

@@ -93,7 +93,8 @@ void uart_putc(const char c) {
 	SSR_1 &= ~SSR_TDRE;
 }
 
-void uart_puts(const char *str, int len) {
+void uart_puts(const char *str) {
+    int len = strlen(str);
 	for (short i=0; i<len; i++) {
 		uart_putc(str[i]);
 	}
@@ -150,7 +151,7 @@ void rxi1_irq() {
 }
 
 void debug_irq() {
-	uart_puts('D');
+	uart_puts("D");
 	uart_put_u16(SCR_1);
 }
 
@@ -207,16 +208,16 @@ void uart_put_pointer(void *value) {
 }
 
 static void uart_print_ringbuffer(struct ringbuffer_t *ring) {
-	uart_puts("=ringbuffer\r\n", 11);
-	uart_puts("po ", 3);
+	uart_puts("=ringbuffer\r\n");
+	uart_puts("po ");
 	uart_put_pointer(ring);
-	uart_puts("st ", 3);
+	uart_puts("st ");
 	uart_put_pointer(ring->start);
-	uart_puts("la ", 3);
+	uart_puts("la ");
 	uart_put_pointer(ring->last);
-	uart_puts("rd ", 3);
+	uart_puts("rd ");
 	uart_put_pointer(ring->read);
-	uart_puts("wr ", 3);
+	uart_puts("wr ");
 	uart_put_pointer(ring->write);
 }
 

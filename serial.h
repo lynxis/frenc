@@ -63,7 +63,7 @@ void rxi1_irq();
 void eri1_irq();
 void uart_read_poll();
 void uart_putc(const char c);
-void uart_puts(const char *str, int len);
+void uart_puts(const char *str);
 int uart_getc(char *ch);
 int uart_readable();
 int setup_serial(enum e_baudrate baudrate, short enable_interupts);

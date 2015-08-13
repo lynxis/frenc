@@ -56,7 +56,7 @@ int main() {
 	set_dac(0, 120);
 	set_dac(1, 120);
 	uart_print_rx_ringbuffer();
-	uart_puts("TX\n", 3);
+	uart_puts("TX\n");
 	uart_print_tx_ringbuffer();
 
 	for(int i=0; i<5; i++) {
@@ -67,13 +67,28 @@ int main() {
 	}
 
 	power_board();
+  uart_enable_rx();
 
 	while(1) {
-		uart_puts("yip", 3);
+		uart_puts("yip");
+		//while (uart_readable()) {
+		//	char c;
+		//	uart_puts("rd:", 3);
+		//	if (uart_getc(&c))
+		//		break;
+		//	uart_putc(c);
+		//}
+		//uart_read_poll();
+		
+		debug_irq();
 		led_caps(1);
 		sleep(1);
 
 		led_caps(0);
 		sleep(1);
 	}
+	uart_puts("NEVER");
+	uart_puts("NEVER");
+	uart_puts("NEVER");
+	uart_puts("NEVER");
 }
