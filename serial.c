@@ -125,21 +125,30 @@ static struct ringbuffer_t rxring = {
 
 /* TODO: error handling? */
 void eri1_irq() {
-  if (SSR_1 & SSR_ORER) {
-    SSR_1 &= ~(SSR_ORER | SSR_RDRF);
-  } else if(SSR_1 & SSR_PER) {
-    SSR_1 &= ~SSR_PER;
-  } else if(SSR_1 & SSR_FER) {
-    SSR_1 &= ~SSR_FER;
-  }
+	uart_putc('E');
+	if (SSR_1 & SSR_ORER) {
+		SSR_1 &= ~(SSR_ORER | SSR_RDRF);
+	}
+	if (SSR_1 & SSR_PER) {
+		SSR_1 &= ~SSR_PER;
+	}
+	if (SSR_1 & SSR_FER) {
+		SSR_1 &= ~SSR_FER;
+	}
+	if (SSR_1 & SSR_RDRF) {
+		SSR_1 &= ~(SSR_RDRF);
+	}
 }
 
 void rxi1_irq() {
-  if (!(SSR_1 & SSR_RDRF))
-    return; /* receive data register full isn't set */
+	uart_putc('r');
+	while (SSR_1 & SSR_RDRF) {
+		uart_putc('R');
+		ringbuffer_write(&rxring, RDR_1);
+		SSR_1 & ~(SSR_RDRF | SSR_ORER | SSR_PER | SSR_FER);
+	}
+}
 
-  ringbuffer_write(&rxring, RDR_1);
-  SSR_1 & ~SSR_RDRF;
 }
 
 /* called when transfered one byte */
