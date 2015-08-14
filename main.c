@@ -76,7 +76,7 @@ int main() {
   uart_enable_rx();
 
 	while(1) {
-		uart_puts("yip");
+		uart_puts("yip\r\n");
 		//while (uart_readable()) {
 		//	char c;
 		//	uart_puts("rd:", 3);

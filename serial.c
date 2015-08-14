@@ -151,6 +151,7 @@ void rxi1_irq() {
 }
 
 void debug_irq() {
+	uart_puts("\r\n");
 	uart_puts("D");
 	uart_put_u16(SCR_1);
 }
