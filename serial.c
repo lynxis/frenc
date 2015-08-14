@@ -151,9 +151,10 @@ void rxi1_irq() {
 }
 
 void debug_irq() {
-	uart_puts("\r\n");
-	uart_puts("D");
+	uart_puts("\r\nSCR: ");
 	uart_put_u16(SCR_1);
+	uart_puts("\r\nSSR: ");
+	uart_put_u16(SSR_1);
 }
 
 /* called when transfered one byte */
