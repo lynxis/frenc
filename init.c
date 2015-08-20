@@ -20,5 +20,4 @@ void init() {
 	len = &ebss - &bss;
 	while (len--)
 		*dest++ = 0;
-	main();
 }

@@ -34,5 +34,6 @@ _continue:
         mov.l   #_stack,sp
 
 ; call main
-        jmp     @_init
+        jsr     @_init
+        jmp     @_main
         .end
