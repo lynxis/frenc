@@ -141,7 +141,7 @@ void eri1_irq() {
 	}
 }
 
-static uint8_t rdr;
+uint8_t rdr;
 
 #pragma interrupt
 void rxi1_irq() {

@@ -77,4 +77,6 @@ void uart_put_pointer(void *value);
 void uart_print_rx_ringbuffer();
 void uart_print_tx_ringbuffer();
 
+extern uint8_t rdr;
+
 #endif /* SERIAL_H */

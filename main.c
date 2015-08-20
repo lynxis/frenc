@@ -79,7 +79,10 @@ int main() {
 	enable_irqs();
 
 	while(1) {
-		uart_puts("yip\r\n");
+		uart_puts("\r\nyip\r\n");
+		uart_puts("rdr :");
+		uart_putc(rdr);
+		uart_puts("\r\n");
 		//while (uart_readable()) {
 		//	char c;
 		//	uart_puts("rd:", 3);
