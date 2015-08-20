@@ -44,7 +44,7 @@ int main() {
 		sleep(1);
 	}
 
-	int ret = setup_serial(B9600, 1);
+	int ret = setup_serial(B9600, 0);
 	while(ret) {
 		led_num(1);
 	}
