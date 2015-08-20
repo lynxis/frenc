@@ -52,6 +52,7 @@ int main() {
 	print_size_u8();
 	print_size_u16();
 	print_size_u32();
+	print_size_int();
 	print_size_pointer();
 	dump_memory((void *)0xffe080, 3*32);
 
