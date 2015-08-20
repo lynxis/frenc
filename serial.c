@@ -158,15 +158,10 @@ void rxi1_irq() {
 		return;
 	}
 	if (SSR_1 & SSR_RDRF) {
-		SSR_1 &= ~(SSR_RDRF);
-		return;
-	}
-
-	while (SSR_1 & SSR_RDRF) {
 		uart_putc('R');
 		rdr = RDR_1;
-		SSR_1 & ~(SSR_RDRF | SSR_ORER | SSR_PER | SSR_FER);
 	}
+	SSR_1 & ~(SSR_RDRF | SSR_ORER | SSR_PER | SSR_FER);
 }
 
 void debug_irq() {
