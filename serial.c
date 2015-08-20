@@ -71,7 +71,7 @@ int setup_serial(enum e_baudrate baudrate, short enable_interupts) {
 		return 1;
 	}
 
-	/* wait at least 1 bit interval until setting TE/RE T1E/R1E bits */
+	/* wait at least 1 bit interval until setting TE/RE TIE/RIE bits */
 	usleep(1000);
 
 	SCR_1 |= SCR_TE | SCR_RE;

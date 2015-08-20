@@ -29,7 +29,7 @@ void power_board() {
 }
 
 int main() {
-	P2DDR = 0xf0; /* -MAINOFF  -LEDNUMPAD -BAYLED -LEDCAPSLOCK */
+	P2DDR = 0xf0; /* -MAINOFF -LEDNUMPAD -BAYLED -LEDCAPSLOCK */
 	P4DDR = ((1 << 0) | (1 << 3) | 1 << 4); /* -KBRC -BATLOW FANON */
 	P9DDR = (1 << 5);
 
