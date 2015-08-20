@@ -64,6 +64,7 @@ int main() {
 	uart_print_rx_ringbuffer();
 	uart_puts("TX\n");
 	uart_print_tx_ringbuffer();
+	test_ringbuffer();
 
 	for(int i=0; i<5; i++) {
 		led_num(1);
