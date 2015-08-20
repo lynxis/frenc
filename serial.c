@@ -127,7 +127,6 @@ static struct ringbuffer_t rxring = {
 /* TODO: error handling? */
 #pragma interrupt
 void eri1_irq() {
-	uart_putc('E');
 	if (SSR_1 & SSR_ORER) {
 		SSR_1 &= ~(SSR_ORER | SSR_RDRF);
 	}
@@ -146,7 +145,6 @@ static uint8_t rdr;
 
 #pragma interrupt
 void rxi1_irq() {
-	uart_putc('r');
 	if (SSR_1 & SSR_ORER) {
 		SSR_1 &= ~(SSR_ORER | SSR_RDRF);
 		return;
@@ -160,7 +158,6 @@ void rxi1_irq() {
 		return;
 	}
 	if (SSR_1 & SSR_RDRF) {
-		uart_putc('R');
 		rdr = RDR_1;
 	}
 	SSR_1 & ~(SSR_RDRF | SSR_ORER | SSR_PER | SSR_FER);
