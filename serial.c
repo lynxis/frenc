@@ -94,14 +94,14 @@ void uart_putc(const char c) {
 }
 
 void uart_puts(const char *str) {
-    int len = strlen(str);
+	int len = strlen(str);
 	for (short i=0; i<len; i++) {
 		uart_putc(str[i]);
 	}
 }
 
 void uart_enable_rx() {
-	SCR_1 |=  SCR_RIE | SCR_RE;
+	SCR_1 |= SCR_RIE | SCR_RE;
 	eri1_irq();
 }
 
