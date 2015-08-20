@@ -143,6 +143,23 @@ void eri1_irq() {
 
 void rxi1_irq() {
 	uart_putc('r');
+	if (SSR_1 & SSR_ORER) {
+		SSR_1 &= ~(SSR_ORER | SSR_RDRF);
+		return;
+	}
+	if (SSR_1 & SSR_PER) {
+		SSR_1 &= ~SSR_PER;
+		return;
+	}
+	if (SSR_1 & SSR_FER) {
+		SSR_1 &= ~SSR_FER;
+		return;
+	}
+	if (SSR_1 & SSR_RDRF) {
+		SSR_1 &= ~(SSR_RDRF);
+		return;
+	}
+
 	while (SSR_1 & SSR_RDRF) {
 		uart_putc('R');
 		ringbuffer_write(&rxring, RDR_1);
