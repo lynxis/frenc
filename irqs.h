@@ -17,11 +17,11 @@
 #define KMIMR	(*(volatile unsigned char*) (0xfffff1)) /* Keyboard matrix interrupt register 6 */
 #define KMIMRA	(*(volatile unsigned char*) (0xfffff2)) /* Keyboard matrix interrupt register A */
 
-extern inline void disable_irqs() {
+inline void disable_irqs() {
 	__asm__ __volatile__("\torc  #0x80,ccr\n":::"cc");
 }
 
-extern inline void enable_irqs() {
+inline void enable_irqs() {
 	__asm__ __volatile__("\tandc #0x7f,ccr\n":::"cc");
 }
 
