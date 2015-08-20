@@ -20,6 +20,7 @@ SECTIONS
 	} >rom
 
 	.data : {
+		_rom_data = LOADADDR(.data);
 		_data = .;
 		*(.data);
 		_edata = .;
