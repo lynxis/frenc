@@ -224,16 +224,16 @@ void uart_put_pointer(void *value) {
 }
 
 static void uart_print_ringbuffer(struct ringbuffer_t *ring) {
-	uart_puts("=ringbuffer\r\n");
-	uart_puts("po ");
+	uart_puts("\r\n=ringbuffer");
+	uart_puts("\r\npo ");
 	uart_put_pointer(ring);
-	uart_puts("st ");
+	uart_puts("\r\nst ");
 	uart_put_pointer(ring->start);
-	uart_puts("la ");
+	uart_puts("\r\nla ");
 	uart_put_pointer(ring->last);
-	uart_puts("rd ");
+	uart_puts("\r\nrd ");
 	uart_put_pointer(ring->read);
-	uart_puts("wr ");
+	uart_puts("\r\nwr ");
 	uart_put_pointer(ring->write);
 }
 
