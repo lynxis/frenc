@@ -8,7 +8,7 @@
 #include "adc.h"
 #include "led.h"
 #include "pmh4.h"
-
+#include "irqs.h"
 #include "test.h"
 
 void power_board() {
@@ -75,7 +75,8 @@ int main() {
 	}
 
 	power_board();
-  uart_enable_rx();
+	uart_enable_rx();
+	enable_irqs();
 
 	while(1) {
 		uart_puts("yip\r\n");
