@@ -80,17 +80,13 @@ int main() {
 
 	while(1) {
 		uart_puts("\r\nyip\r\n");
-		uart_puts("rdr :");
-		uart_putc(rdr);
-		uart_puts("\r\n");
-		//while (uart_readable()) {
-		//	char c;
-		//	uart_puts("rd:", 3);
-		//	if (uart_getc(&c))
-		//		break;
-		//	uart_putc(c);
-		//}
-		//uart_read_poll();
+		while (uart_readable()) {
+			char c;
+			uart_puts("rd:");
+			if (uart_getc(&c))
+				break;
+			uart_putc(c);
+		}
 		
 		debug_irq();
 		led_caps(1);

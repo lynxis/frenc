@@ -158,7 +158,7 @@ void rxi1_irq() {
 		return;
 	}
 	if (SSR_1 & SSR_RDRF) {
-		rdr = RDR_1;
+		ringbuffer_write(&rxring, RDR_1);
 	}
 	SSR_1 &= ~(SSR_RDRF | SSR_ORER | SSR_PER | SSR_FER);
 }
