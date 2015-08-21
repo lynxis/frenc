@@ -12,7 +12,7 @@ size_t strlen(const char *s) {
 void *memset(void *s, int c, size_t n) {
 	uint8_t *tmp = s;
 	while (n--)
-		*tmp++ = c;
+		*(tmp++) = c;
 	return s;
 }
 
