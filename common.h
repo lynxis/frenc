@@ -14,5 +14,6 @@ typedef unsigned long size_t;
 #define BIT(x) (1 << x)
 
 size_t strlen(const char *s);
+void *memset(void *s, int c, size_t n);
 
 #endif /* COMMON_H */
