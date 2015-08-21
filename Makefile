@@ -1,7 +1,7 @@
 COPT   = -c -ms -Wall --std=c99
 ASMOPT = -o
 
-OBJ    = test.o common.o ringbuffer.o led.o sleep.o serial.o pmh4.o main.o startup.o vectors.o isrhdl.o adc.o
+OBJ    = test.o common.o ringbuffer.o led.o sleep.o serial.o pmh4.o console.o main.o startup.o vectors.o isrhdl.o adc.o
 
 AS := h8300-hms-as
 GCC := h8300-hms-gcc
