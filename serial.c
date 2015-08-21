@@ -145,6 +145,7 @@ uint8_t rdr;
 
 #pragma interrupt
 void rxi1_irq() {
+	char ch;
 	if (SSR_1 & SSR_ORER) {
 		SSR_1 &= ~(SSR_ORER | SSR_RDRF);
 		return;
@@ -158,7 +159,9 @@ void rxi1_irq() {
 		return;
 	}
 	if (SSR_1 & SSR_RDRF) {
-		ringbuffer_write(&rxring, RDR_1);
+		ch = RDR_1;
+		uart_putc(ch);
+		ringbuffer_write(&rxring, ch);
 	}
 	SSR_1 &= ~(SSR_RDRF | SSR_ORER | SSR_PER | SSR_FER);
 }
