@@ -2,6 +2,8 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
+#include "common.h"
+
 #define SMR_0 (*(volatile unsigned char*)  (0xffffd8)) /* Serial 0 Mode */
 #define BRR_0 (*(volatile unsigned char*)  (0xffffd9)) /* Serial 0 Bit Rate */
 #define SCR_0 (*(volatile unsigned char*)  (0xffffda)) /* Serial 0 Serial Control */
