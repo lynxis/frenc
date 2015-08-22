@@ -1,4 +1,3 @@
-SEARCH_DIR (/home/lynxis/projects/coreboot/h8s/h8300-toolchain-builder/install/h8300-elf/lib)
 OUTPUT_ARCH(h8300:h8300s)
 ENTRY(_startp)
 
